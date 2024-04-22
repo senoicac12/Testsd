@@ -1,0 +1,64 @@
+version: '3.3'
+services:
+  backend:
+    container_name: flask-backend
+    build: ./backend
+    ports:
+      - '50051:50051'
+    depends_on:
+      - postgres
+      - myredis1
+      - myredis2
+      - myredis3
+
+  cliente:
+    container_name: flask-cliente
+    build: ./cliente
+    ports:
+      - '8000:5000'
+    depends_on:
+      - backend
+      - postgres
+      - myredis1
+      - myredis2
+      - myredis3
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres-tarea1
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: tarea1
+
+  myredis1:
+    image: bitnami/redis:latest
+    container_name: mycontenedor-1-redis
+    ports:
+      - "6379:6379"
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    restart: always
+    
+  myredis2:
+    image: bitnami/redis:latest
+    container_name: mycontenedor-2-redis
+    ports:
+      - "7000:6379"
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    restart: always
+    
+  myredis3:
+    image: bitnami/redis:latest
+    container_name: mycontenedor-3-redis
+    ports:
+      - "7001:6379"
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    restart: always
+    

@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Rango de IDs
+start_id=8000
+end_id=8500
+
+# Nombre del archivo para guardar los datos
+output_file="data.txt"
+
+# Eliminar el archivo si ya existe
+rm -f "$output_file"
+
+# Realizar las solicitudes y guardar la salida en el archivo
+for ((i = 1; i <= 500; i++)); do
+    id=$((RANDOM % (end_id - start_id + 1) + start_id))
+    # Realizar la solicitud con el ID aleatorio y guardar la salida en el archivo
+    curl -sS "http://192.168.48.7:5000/search?id=$id" >> "$output_file"
+done
